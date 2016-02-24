@@ -1,0 +1,59 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    var blogIndexNode = Model.Content.AncestorOrSelf(2);
+
+    @* Pagination Logic *@
+    var postsPerPage = 5;
+
+    var allPosts = blogIndexNode.Descendants().Where(a => a.CreatorName == Model.Content.Name && a.DocumentTypeAlias == "BlogPost").OrderByDescending(c => c.CreateDate).ToList();
+
+    var totalPages = Math.Ceiling((double)(allPosts.Count() / (double)postsPerPage));
+
+    var currentPageNo = int.Parse(Request.QueryString["p"] ?? "1");
+    if (currentPageNo > totalPages) { currentPageNo = 1; }
+
+
+    var currentPostsRange = (currentPageNo * postsPerPage) + postsPerPage;
+
+    var currentPagePosts = allPosts.Skip((currentPageNo * postsPerPage) - postsPerPage).Take(postsPerPage);
+
+
+}
+
+<section>
+    <h1>About @Model.Content.Name</h1>
+    <p>@(Model.Content.GetPropertyValue<string>("authorBio"))</p>
+</section>
+<section>
+    <h2>@(Model.Content.Name)&#39;s Posts</h2>
+    @foreach (var post in currentPagePosts)
+    {
+        @Html.Partial("Blog/_blogPostSnippet", post)
+    }
+    <nav>
+        <ul class="pagination">
+            @if (currentPageNo - 1 >= 1)
+            {
+                <li class="left">
+                    <a href="@string.Concat(Model.Content.UrlAbsolute(), "?p=", currentPageNo - 1)">Newer Posts</a>
+                </li>
+            }
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="@(currentPageNo == i ? "selected" : "")">
+                    <a href="@string.Concat(Model.Content.UrlAbsolute(), "?p=", i)">
+                        @i
+                    </a>
+                </li>
+            }
+            @if (currentPageNo + 1 <= totalPages)
+            {
+                <li class="right">
+                    <a href="@string.Concat(Model.Content.UrlAbsolute(), "?p=", currentPageNo + 1)">Older Posts</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</section>
+
+

@@ -1,0 +1,39 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+
+@{ 
+    var post = Model.Content;
+}
+
+<article class="media" itemprop="blogPosts" itemscope itemtype="https://schema.org/BlogPosting" itemid="@post.UrlAbsolute()">
+    <meta itemscope itemtype="https://schema.org/WebPage" itemprop="mainEntityOfPage" itemId="@post.UrlAbsolute()" />
+    @if (post.HasProperty("blogPostHeadlineImage"))
+            {
+                var blogPostHeadlineImage = Umbraco.TypedMedia(post.GetPropertyValue<int>("blogPostHeadlineImage"));
+        <div class="media-left" itemscope itemtype="https://schema.org/ImageObject" itemprop="image">
+            <link itemprop="url" href="@(blogPostHeadlineImage.Url)" />
+            <meta itemprop="height" content="@blogPostHeadlineImage.GetPropertyValue("umbracoHeight")" />
+            <meta itemprop="width" content="@blogPostHeadlineImage.GetPropertyValue("umbracoWidth")" />
+            <a href="@post.UrlAbsolute()" class="blog-post-thumbnail thumbnail"><img alt="@blogPostHeadlineImage.GetPropertyValue("alttext")" src="@(blogPostHeadlineImage.Url)" /></a>
+        </div>
+    }
+    <div class="media-body">
+        <a href="@post.UrlAbsolute()"><h3 class="media-heading" itemprop="headline">@post.Name</h3></a>
+        <p itemprop="description">@(post.GetPropertyValue<string>("blogPostExcerpt"))</p>
+        <p><a href="@post.UrlAbsolute()">Read More...</a></p>
+        <footer>
+            <p class="text-muted">
+                By <span itemscope itemtype="https://schema.org/Person" itemprop="author"><span itemprop="name">@post.CreatorName</span></span> on <time itemprop="datePublished" datetime="@post.CreateDate.ToIsoString()">@post.CreateDate.ToString("ddd dd MMM yyyy")</time>
+                <meta itemprop="dateModified" content="@post.UpdateDate.ToIsoString()" />
+            </p>
+        </footer>
+    </div>
+    <span itemscope itemtype="https://schema.org/Organization" itemprop="publisher">
+        <meta itemprop="name" content="@(Model.Content.AncestorOrSelf(2).GetPropertyValue<string>("publisherName"))" />
+        @if (!string.IsNullOrEmpty(Model.Content.AncestorOrSelf(2).GetPropertyValue<string>("siteLogo")))
+        {
+            <link itemprop="logo" src="@(Umbraco.Media(Model.Content.AncestorOrSelf(2).GetPropertyValue<string>("siteLogo")).Url)" />
+        }
+    </span>
+</article>
+
+

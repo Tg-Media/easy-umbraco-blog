@@ -1,0 +1,109 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+
+@{ 
+    var authorInfoNode = Model.Content.AncestorOrSelf(2).Descendants().Where(n => n.DocumentTypeAlias == "authorInfo").SingleOrDefault(a => a.Name == Model.Content.CreatorName);
+}
+
+<article itemscope itemtype="https://schema.org/BlogPosting">
+    <meta itemscope itemtype="https://schema.org/WebPage" itemprop="mainEntityOfPage" itemId="@Model.Content.UrlAbsolute()" />
+    @if (Model.Content.HasProperty("blogPostHeadlineImage"))
+    {
+        var blogHeadlineImage = Umbraco.Media(Model.Content.GetPropertyValue<int>("blogPostHeadlineImage"));
+        <div itemscope itemtype="https://schema.org/ImageObject" itemprop="image">
+            <link itemprop="url" href="@(blogHeadlineImage.Url)" />
+            <meta itemprop="height" content="@blogHeadlineImage.GetPropertyValue("umbracoHeight")" />
+            <meta itemprop="width" content="@blogHeadlineImage.GetPropertyValue("umbracoWidth")" />
+            <img src="@(blogHeadlineImage.Url)" itemprop="image" class="blog-headline-image img-responsive" alt="@blogHeadlineImage.alttext" />
+        </div>
+    }
+
+    <h1 itemprop="headline">@Model.Content.Name</h1>
+    <section itemprop="text">
+        @(Model.Content.GetPropertyValue<HtmlString>("blogPostContent"))
+    </section>
+
+    <footer>
+        <p class="text-muted">By <a href="@authorInfoNode.UrlAbsolute()">@authorInfoNode.Name</a> on <time itemprop="datePublished" datetime="@Model.Content.CreateDate.ToIsoString()">@Model.Content.CreateDate.ToString("ddd dd MMM yyyy")</time></p>
+        <meta itemprop="dateModified" content="@Model.Content.UpdateDate.ToIsoString()" />
+        <section class="panel panel-default" itemscope itemprop="author" itemtype="https://schema.org/Person">
+            <div class="panel-body">
+                <div class="media blog-author">
+                    <div class="media-left">
+                        @{
+                            IPublishedContent blogAuthorAvatar = null;
+                            if (authorInfoNode.HasValue("authorProfileImage"))
+                            {
+                                blogAuthorAvatar = Umbraco.TypedMedia(authorInfoNode.GetPropertyValue<int>("authorProfileImage"));
+                            }
+                            else {
+                                blogAuthorAvatar = Umbraco.Media(0);
+                            }
+                        }
+                        <img src="@blogAuthorAvatar.Url" class="blog-author-avatar" alt="@(blogAuthorAvatar.GetPropertyValue<string>("alttext"))" />
+                    </div>
+                    <div class="media-body">
+                        <h4 itemprop="name">@authorInfoNode.Name</h4>
+                        <p itemprop="description">@(authorInfoNode.GetPropertyValue<string>("authorBio"))</p>
+                        <p><a href="@authorInfoNode.Url" itemprop="url">Read My Other Articles</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="social-buttons">
+            <h3>Share on Social Media</h3>
+            @Html.Partial("Blog/_socialButtons")
+        </section>
+
+        <section class="comments">
+            <h3>Leave your Comment</h3>
+            @Html.Partial("Blog/_disqusComments")
+        </section>
+
+
+
+        @{
+            var relatedPosts = new List<IPublishedContent>();
+            for (int i = 1; i < 4; i++)
+            {
+                if (Model.Content.PrecedingSibling(i) != null && Model.Content.PrecedingSibling(i).DocumentTypeAlias == "BlogPost")
+                {
+                    relatedPosts.Add(Model.Content.PrecedingSibling(i));
+                }
+            }
+        }
+        @if (relatedPosts.Count > 0)
+        {
+            <section class="related-posts">
+
+                <h3>Related Posts</h3>
+                <div class="row">
+                    @foreach (var post in relatedPosts)
+                    {
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    @if (Model.Content.HasProperty("blogPostHeadlineImage"))
+                                    {
+                                        var headlineImage = Umbraco.Media(post.GetPropertyValue<int>("blogPostHeadlineImage"));
+                                        <a href="@post.UrlAbsolute()" class="blog-post-thumbnail blog-related-post-thumbnail thumbnail"><img src="@(headlineImage.Url)" alt="@headlineImage.alttext" /></a>
+                                    }
+                                    <p>@post.Name</p>
+                                    <p><a href="@post.UrlAbsolute()" class="btn btn-default">Read More</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </section>
+
+        }
+        <span itemscope itemtype="https://schema.org/Organization" itemprop="publisher">
+            <meta itemprop="name" content="@(Model.Content.AncestorOrSelf(2).GetPropertyValue<string>("publisherName"))" />
+            @if (!string.IsNullOrEmpty(Model.Content.AncestorOrSelf(2).GetPropertyValue<string>("siteLogo")))
+            {
+                <link itemprop="logo" src="@(Umbraco.Media(Model.Content.AncestorOrSelf(2).GetPropertyValue<string>("siteLogo")).Url)" />
+            }
+        </span>
+    </footer>
+</article>

@@ -1,15 +1,3 @@
-# easy-umbraco-blog
-Umbraco package with document types and partial views for a blog. Created for [webuyanybike](https://www.webuyanybike.co.uk/) and [sellbike](https://www.sellbike.com/). Developed on Umbraco 7.4.1. Designed for use with Bootstrap 3
-
-This package won't give you a blog out of the box - but it will give you a set of document types and partial views that you can implement your own templates around.
-
-## How do I use it?
-You should zip up the easy-umbraco-blog directory and install it through the Umbraco backoffice (Developer > Packages > Install Local Package)
-
-## Do you offer support?
-Open an issue and we'd love to help you out. You can also get in touch via the [tg-media website](tg-media.co.uk). We'll usually get back to you pretty quick if you contact us during UK business hours.
-
-## License: BSD License
 Copyright (c) 2016, tg-media.co.uk
 All rights reserved.
 

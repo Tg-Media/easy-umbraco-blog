@@ -1,0 +1,17 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = "@(Model.Content.GetPropertyValue("canonicalLink") ?? string.Format("https://{0}{1}", Request.Url.Authority, Request.Url.AbsolutePath))";
+        this.page.identifier = "@Model.Content.Id";
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');
+
+        s.src = '@(Model.Content.AncestorOrSelf(2).GetPropertyValue<string>("disqusEmbedjsUrl"))';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>

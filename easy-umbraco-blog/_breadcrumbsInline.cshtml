@@ -1,0 +1,11 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+<nav>
+    <ol class="breadcrumb">
+
+        @foreach (var ancestor in Model.Content.Ancestors().Where(c => c.DocumentTypeAlias != "authorsIndex").Reverse())
+        {
+            <li><a href="@ancestor.UrlAbsolute()">@ancestor.Name</a></li>
+        }
+        <li>@Model.Content.Name</li>
+    </ol>
+</nav>

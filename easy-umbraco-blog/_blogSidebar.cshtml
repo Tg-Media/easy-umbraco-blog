@@ -1,0 +1,28 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+<div class="panel panel-default">
+    <section class="panel-body">
+        <h2>@(Model.Content.AncestorOrSelf(2).GetPropertyValue("sidebarTextHeader"))</h2>
+        @(Model.Content.AncestorOrSelf(2).GetPropertyValue("sidebarTextContent"))
+    </section>
+</div>
+<div class="panel panel-default">
+    <section class="panel-body">
+        <h4>Latest Posts</h4>
+        <nav>
+            <ul>
+                @foreach (var post in Model.Content.AncestorOrSelf(2).Descendants().Where(n => n.DocumentTypeAlias == "BlogPost").OrderByDescending(c => c.UpdateDate).ToList().Take(5))
+                {
+                    <li><a href="@post.UrlAbsolute()">@post.Name</a></li>
+                }
+            </ul>
+        </nav>
+    </section>
+</div>
+<div class="panel panel-default">
+    <section class="panel-body">
+        <h4>Share This</h4>
+        @Html.Partial("Blog/_socialButtons")
+    </section>
+</div>
+
+
