@@ -10,7 +10,7 @@
         <h4>Latest Posts</h4>
         <nav>
             <ul>
-                @foreach (var post in Model.Content.AncestorOrSelf(2).Descendants().Where(n => n.DocumentTypeAlias == "BlogPost").OrderByDescending(c => c.UpdateDate).ToList().Take(5))
+                @foreach (var post in Model.Content.AncestorOrSelf(2).Descendants().Where(n => n.DocumentTypeAlias == "BlogPost").OrderByDescending(c => c.CreateDate).ToList().Take(5))
                 {
                     <li><a href="@post.UrlAbsolute()">@post.Name</a></li>
                 }

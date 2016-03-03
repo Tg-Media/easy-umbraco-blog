@@ -1,11 +1,11 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
-
-@{ 
+@using System.Text.RegularExpressions
+@{
     var authorInfoNode = Model.Content.AncestorOrSelf(2).Descendants().Where(n => n.DocumentTypeAlias == "authorInfo").SingleOrDefault(a => a.Name == Model.Content.CreatorName);
 }
 
 <article itemscope itemtype="https://schema.org/BlogPosting">
-    <meta itemscope itemtype="https://schema.org/WebPage" itemprop="mainEntityOfPage" itemId="@Model.Content.UrlAbsolute()" />
+    <meta itemscope itemtype="https://schema.org/WebPage" itemprop="mainEntityOfPage" />
     @if (Model.Content.HasProperty("blogPostHeadlineImage"))
     {
         var blogHeadlineImage = Umbraco.Media(Model.Content.GetPropertyValue<int>("blogPostHeadlineImage"));
@@ -39,7 +39,7 @@
                                 blogAuthorAvatar = Umbraco.Media(0);
                             }
                         }
-                        <img src="@blogAuthorAvatar.Url" class="blog-author-avatar" alt="@(blogAuthorAvatar.GetPropertyValue<string>("alttext"))" />
+                        <img src="@(Regex.Replace(blogAuthorAvatar.Url, "\\.(?=[^.]*$)", "_big-thumb."))" class="blog-author-avatar" alt="@(blogAuthorAvatar.GetPropertyValue<string>("alttext"))" />
                     </div>
                     <div class="media-body">
                         <h4 itemprop="name">@authorInfoNode.Name</h4>
@@ -49,7 +49,6 @@
                 </div>
             </div>
         </section>
-
         <section class="social-buttons">
             <h3>Share on Social Media</h3>
             @Html.Partial("Blog/_socialButtons")
@@ -86,7 +85,7 @@
                                     @if (Model.Content.HasProperty("blogPostHeadlineImage"))
                                     {
                                         var headlineImage = Umbraco.Media(post.GetPropertyValue<int>("blogPostHeadlineImage"));
-                                        <a href="@post.UrlAbsolute()" class="blog-post-thumbnail blog-related-post-thumbnail thumbnail"><img src="@(headlineImage.Url)" alt="@headlineImage.alttext" /></a>
+                                        <a href="@post.UrlAbsolute()" class="blog-post-thumbnail blog-related-post-thumbnail thumbnail"><img src="@(Regex.Replace(headlineImage.Url, "\\.(?=[^.]*$)", "_big-thumb."))" alt="@headlineImage.alttext" /></a>
                                     }
                                     <p>@post.Name</p>
                                     <p><a href="@post.UrlAbsolute()" class="btn btn-default">Read More</a></p>

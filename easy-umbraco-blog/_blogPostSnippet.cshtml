@@ -1,19 +1,20 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using System.Text.RegularExpressions
 
 @{ 
     var post = Model.Content;
 }
 
-<article class="media" itemprop="blogPosts" itemscope itemtype="https://schema.org/BlogPosting" itemid="@post.UrlAbsolute()">
-    <meta itemscope itemtype="https://schema.org/WebPage" itemprop="mainEntityOfPage" itemId="@post.UrlAbsolute()" />
+<article class="media" itemprop="blogPosts" itemscope itemtype="https://schema.org/BlogPosting">
+    <meta itemscope itemtype="https://schema.org/WebPage" itemprop="mainEntityOfPage" />
     @if (post.HasProperty("blogPostHeadlineImage"))
             {
                 var blogPostHeadlineImage = Umbraco.TypedMedia(post.GetPropertyValue<int>("blogPostHeadlineImage"));
         <div class="media-left" itemscope itemtype="https://schema.org/ImageObject" itemprop="image">
-            <link itemprop="url" href="@(blogPostHeadlineImage.Url)" />
+            <link itemprop="url" href="@(Regex.Replace(blogPostHeadlineImage.Url, "\\.(?=[^.]*$)", "_big-thumb."))" />
             <meta itemprop="height" content="@blogPostHeadlineImage.GetPropertyValue("umbracoHeight")" />
             <meta itemprop="width" content="@blogPostHeadlineImage.GetPropertyValue("umbracoWidth")" />
-            <a href="@post.UrlAbsolute()" class="blog-post-thumbnail thumbnail"><img alt="@blogPostHeadlineImage.GetPropertyValue("alttext")" src="@(blogPostHeadlineImage.Url)" /></a>
+            <a href="@post.UrlAbsolute()" class="blog-post-thumbnail thumbnail"><img alt="@blogPostHeadlineImage.GetPropertyValue("alttext")" src="@(Regex.Replace(blogPostHeadlineImage.Url, "\\.(?=[^.]*$)", "_big-thumb."))" /></a>
         </div>
     }
     <div class="media-body">

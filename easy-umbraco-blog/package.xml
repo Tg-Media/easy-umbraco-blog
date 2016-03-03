@@ -45,12 +45,12 @@
   <info>
     <package>
       <name>Easy Umbraco Blog</name>
-      <version>1.0</version>
-      <license url="https://github.com/Tg-Media/easy-umbraco-blog">BSD License</license>
-      <url>https://github.com/Tg-Media/easy-umbraco-blog</url>
+      <version>1.1</version>
+      <license url="http://opensource.org/licenses/MIT">MIT License</license>
+      <url>tg-media.co.uk</url>
       <requirements>
-        <major>3</major>
-        <minor>0</minor>
+        <major>7</major>
+        <minor>4</minor>
         <patch>0</patch>
       </requirements>
     </package>
@@ -58,33 +58,7 @@
       <name>tg-media.co.uk</name>
       <website>tg-media.co.uk</website>
     </author>
-    <readme><![CDATA[Copyright (c) 2016, tg-media.co.uk
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-1. Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-2. Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-3. All advertising materials mentioning features or use of this software
-   must display the following acknowledgement:
-   This product includes software developed by tg-media.co.uk.
-4. Neither the name of the organization (tg-media.co.uk) nor the
-   names of its contributors may be used to endorse or promote products
-   derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY TG-MEDIA.CO.UK ''AS IS'' AND ANY
-EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL TG-MEDIA.CO.UK BE LIABLE FOR ANY
-DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.]]></readme>
+    <readme><![CDATA[]]></readme>
   </info>
   <DocumentTypes>
     <DocumentType>
@@ -96,7 +70,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.]]></readme>
         <Description />
         <AllowAtRoot>False</AllowAtRoot>
         <IsListView>False</IsListView>
-        <Compositions />
+        <Compositions>
+          <Composition>Seo</Composition>
+        </Compositions>
         <AllowedTemplates>
           <Template>AuthorInfo</Template>
         </AllowedTemplates>
@@ -125,7 +101,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.]]></readme>
       </GenericProperties>
       <Tabs>
         <Tab>
-          <Id>44</Id>
+          <Id>42</Id>
           <Caption>Author Bio</Caption>
           <SortOrder>0</SortOrder>
         </Tab>
@@ -159,6 +135,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.]]></readme>
         <Description />
         <AllowAtRoot>False</AllowAtRoot>
         <IsListView>True</IsListView>
+        <Compositions>
+          <Composition>Seo</Composition>
+        </Compositions>
+        <AllowedTemplates>
+          <Template>BlogIndex</Template>
+        </AllowedTemplates>
+        <DefaultTemplate>BlogIndex</DefaultTemplate>
       </Info>
       <Structure>
         <DocumentType>BlogPost</DocumentType>
@@ -171,7 +154,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.]]></readme>
           <Type>Umbraco.Textbox</Type>
           <Definition>0cc0eba1-9960-42c9-bf9b-60e150b429ae</Definition>
           <Tab>Sidebar</Tab>
-          <SortOrder>0</SortOrder>
+          <SortOrder>1</SortOrder>
           <Mandatory>False</Mandatory>
         </GenericProperty>
         <GenericProperty>
@@ -180,18 +163,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.]]></readme>
           <Type>Umbraco.TinyMCEv3</Type>
           <Definition>ca90c950-0aff-4e72-b976-a30b1ac57dad</Definition>
           <Tab>Sidebar</Tab>
-          <SortOrder>1</SortOrder>
+          <SortOrder>0</SortOrder>
           <Mandatory>False</Mandatory>
           <Validation />
           <Description><![CDATA[]]></Description>
         </GenericProperty>
         <GenericProperty>
-          <Name>Twitter Handle</Name>
-          <Alias>twitterHandle</Alias>
-          <Type>Umbraco.Textbox</Type>
-          <Definition>0cc0eba1-9960-42c9-bf9b-60e150b429ae</Definition>
+          <Name>Site Logo</Name>
+          <Alias>siteLogo</Alias>
+          <Type>Umbraco.MediaPicker</Type>
+          <Definition>93929b9a-93a2-4e2a-b239-d99334440a59</Definition>
           <Tab>Settings</Tab>
-          <SortOrder>3</SortOrder>
+          <SortOrder>0</SortOrder>
           <Mandatory>False</Mandatory>
         </GenericProperty>
         <GenericProperty>
@@ -204,21 +187,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.]]></readme>
           <Mandatory>False</Mandatory>
         </GenericProperty>
         <GenericProperty>
+          <Name>Twitter Handle</Name>
+          <Alias>twitterHandle</Alias>
+          <Type>Umbraco.Textbox</Type>
+          <Definition>0cc0eba1-9960-42c9-bf9b-60e150b429ae</Definition>
+          <Tab>Settings</Tab>
+          <SortOrder>3</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Validation>^[^@][\w]+</Validation>
+          <Description><![CDATA[Don't add the "@" character]]></Description>
+        </GenericProperty>
+        <GenericProperty>
           <Name>Publisher Name</Name>
           <Alias>publisherName</Alias>
           <Type>Umbraco.Textbox</Type>
           <Definition>0cc0eba1-9960-42c9-bf9b-60e150b429ae</Definition>
           <Tab>Settings</Tab>
           <SortOrder>1</SortOrder>
-          <Mandatory>False</Mandatory>
-        </GenericProperty>
-        <GenericProperty>
-          <Name>Site Logo</Name>
-          <Alias>siteLogo</Alias>
-          <Type>Umbraco.MediaPicker</Type>
-          <Definition>93929b9a-93a2-4e2a-b239-d99334440a59</Definition>
-          <Tab>Settings</Tab>
-          <SortOrder>0</SortOrder>
           <Mandatory>False</Mandatory>
         </GenericProperty>
       </GenericProperties>
@@ -229,7 +214,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.]]></readme>
           <SortOrder>0</SortOrder>
         </Tab>
         <Tab>
-          <Id>47</Id>
+          <Id>43</Id>
           <Caption>Settings</Caption>
           <SortOrder>1</SortOrder>
         </Tab>
@@ -244,6 +229,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.]]></readme>
         <Description />
         <AllowAtRoot>False</AllowAtRoot>
         <IsListView>False</IsListView>
+        <Compositions>
+          <Composition>Seo</Composition>
+        </Compositions>
+        <AllowedTemplates>
+          <Template>BlogPost</Template>
+        </AllowedTemplates>
+        <DefaultTemplate>BlogPost</DefaultTemplate>
       </Info>
       <Structure />
       <GenericProperties>
