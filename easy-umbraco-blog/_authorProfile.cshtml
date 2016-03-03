@@ -1,4 +1,6 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using System.Text.RegularExpressions
+
 @{
     var blogIndexNode = Model.Content.AncestorOrSelf(2);
 
@@ -22,7 +24,29 @@
 
 <section>
     <h1>About @Model.Content.Name</h1>
-    <p>@(Model.Content.GetPropertyValue<string>("authorBio"))</p>
+    <section class="panel panel-default" itemscope itemprop="author" itemtype="https://schema.org/Person">
+        <div class="panel-body">
+            <div class="media blog-author">
+                <div class="media-left">
+                    @{
+                        IPublishedContent blogAuthorAvatar = null;
+                        if (Model.Content.HasValue("authorProfileImage"))
+                        {
+                            blogAuthorAvatar = Umbraco.TypedMedia(Model.Content.GetPropertyValue<int>("authorProfileImage"));
+                        }
+                        else {
+                            blogAuthorAvatar = Umbraco.Media(0);
+                        }
+                    }
+                    <img src="@(Regex.Replace(blogAuthorAvatar.Url, "\\.(?=[^.]*$)", "_big-thumb."))" class="blog-author-avatar" alt="@(blogAuthorAvatar.GetPropertyValue<string>("alttext"))" />
+                </div>
+                <div class="media-body">
+                    <h4 itemprop="name">@Model.Content.Name</h4>
+                    <p itemprop="description">@(Model.Content.GetPropertyValue<string>("authorBio"))</p>
+                </div>
+            </div>
+        </div>
+    </section>
 </section>
 <section>
     <h2>@(Model.Content.Name)&#39;s Posts</h2>
